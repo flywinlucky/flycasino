@@ -45,7 +45,7 @@
             margin-top: 20px;
             text-align: center;
         }
-        .stake-container input {
+        .stake-container input, .stake-container select {
             padding: 5px;
             margin-right: 10px;
         }
@@ -60,27 +60,66 @@
         .result {
             margin-top: 20px;
         }
+        .max-win {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
         <h1>Mines Game</h1>
         <div class="stake-container">
-            <input type="number" id="stakeAmount" placeholder="Enter stake amount">
+            <input type="number" id="stakeAmount" placeholder="Enter stake amount" min="2">
+            <select id="trapsCount">
+                <option value="1">1 Trap</option>
+                <option value="3">3 Traps</option>
+                <option value="5">5 Traps</option>
+            </select>
             <button onclick="startGame()">Play</button>
         </div>
+        <div class="max-win" id="maxWin">Max Win: $0.00</div>
         <div class="grid" id="grid"></div>
         <div class="result" id="result"></div>
     </div>
     <script>
-        let balance = 1000; // Initial balance
+        let balance = 5000; // Initial balance
         let mines = [];
         let revealedCells = 0;
 
-        function startGame() {
-            const stake = parseInt(document.getElementById('stakeAmount').value) || 0;
+        function calculateMaxWin(stake, traps) {
+            let multiplier;
+            switch (traps) {
+                case 1:
+                    multiplier = 23.88;
+                    break;
+                case 3:
+                    multiplier = 4000;
+                    break;
+                case 5:
+                    multiplier = 8000;
+                    break;
+                default:
+                    multiplier = 0;
+            }
+            return stake * multiplier;
+        }
 
-            if (stake <= 0 || stake > balance) {
+        function updateMaxWin() {
+            const stake = parseFloat(document.getElementById('stakeAmount').value) || 0;
+            const traps = parseInt(document.getElementById('trapsCount').value);
+            const maxWin = calculateMaxWin(stake, traps);
+            document.getElementById('maxWin').textContent = `Max Win: $${maxWin.toFixed(2)}`;
+        }
+
+        document.getElementById('stakeAmount').addEventListener('input', updateMaxWin);
+        document.getElementById('trapsCount').addEventListener('change', updateMaxWin);
+
+        function startGame() {
+            const stake = parseFloat(document.getElementById('stakeAmount').value) || 0;
+            const traps = parseInt(document.getElementById('trapsCount').value);
+
+            if (stake < 2 || stake > balance) {
                 alert('Invalid stake amount.');
                 return;
             }
@@ -89,7 +128,7 @@
             document.getElementById('result').innerHTML = `Game started! Stake: $${stake}. Balance: $${balance.toFixed(2)}`;
 
             mines = Array(25).fill(false);
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < traps; i++) {
                 let mineIndex;
                 do {
                     mineIndex = Math.floor(Math.random() * 25);
@@ -103,12 +142,12 @@
             for (let i = 0; i < 25; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
-                cell.onclick = () => revealCell(i, stake);
+                cell.onclick = () => revealCell(i, stake, traps);
                 grid.appendChild(cell);
             }
         }
 
-        function revealCell(index, stake) {
+        function revealCell(index, stake, traps) {
             if (mines[index]) {
                 document.getElementById('result').innerHTML = `You hit a mine! You lost $${stake}. Balance: $${balance.toFixed(2)}`;
                 document.querySelectorAll('.cell')[index].classList.add('mine');
@@ -118,14 +157,16 @@
                 document.querySelectorAll('.cell')[index].classList.add('revealed');
                 document.querySelectorAll('.cell')[index].onclick = null;
 
-                if (revealedCells === 22) {
-                    const winAmount = stake * 2;
+                if (revealedCells === 25 - traps) {
+                    const winAmount = calculateMaxWin(stake, traps);
                     balance += winAmount;
-                    document.getElementById('result').innerHTML = `You won! Win amount: $${winAmount}. Balance: $${balance.toFixed(2)}`;
+                    document.getElementById('result').innerHTML = `You won! Win amount: $${winAmount.toFixed(2)}. Balance: $${balance.toFixed(2)}`;
                     document.querySelectorAll('.cell').forEach(cell => cell.onclick = null);
                 }
             }
         }
+
+        updateMaxWin();
     </script>
 </body>
 </html>
