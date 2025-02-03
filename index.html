@@ -3,9 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My First Page</title>
+    <title>FlyCasino - Home</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hello, World!</h1>
+    <header>
+        <div class="container">
+            <h1>FlyCasino</h1>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#games">Games</a></li>
+                    <li><a href="#promotions">Promotions</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="account-actions">
+                <button id="loginBtn">Login</button>
+                <button id="signupBtn">Sign Up</button>
+                <div class="balance">Balance: $0.00</div>
+            </div>
+        </div>
+    </header>
+    <section id="hero">
+        <div class="container">
+            <h2>Experience the Thrill of FlyCasino</h2>
+            <p>Join now and get a welcome bonus!</p>
+            <button>Sign Up</button>
+        </div>
+    </section>
+    <section id="games">
+        <div class="container">
+            <h2>Mini Games</h2>
+            <div class="games-grid">
+                <div class="game-card">
+                    <img src="Resources/images/game1.avif" alt="Game 1">
+                    <h3>Game 1</h3>
+                    <p>Description of Game 1</p>
+                </div>
+                <div class="game-card">
+                    <img src="Resources/images/game2.avif" alt="Game 2">
+                    <h3>Game 2</h3>
+                    <p>Description of Game 2</p>
+                </div>
+                <div class="game-card">
+                    <img src="Resources/images/game3.avif" alt="Game 3">
+                    <h3>Game 3</h3>
+                    <p>Description of Game 3</p>
+                </div>
+                <div class="game-card">
+                    <img src="Resources/images/game4.avif" alt="Game 4">
+                    <h3>Game 4</h3>
+                    <p>Description of Game 4</p>
+                </div>
+                <div class="game-card">
+                    <img src="Resources/images/game5.avif" alt="Game 5">
+                    <h3>Game 5</h3>
+                    <p>Description of Game 5</p>
+                </div>
+                <div class="game-card">
+                    <img src="Resources/images/game6.avif" alt="Game 6">
+                    <h3>Game 6</h3>
+                    <p>Description of Game 6</p>
+                </div>
+                <!-- Add more games as needed -->
+            </div>
+        </div>
+    </section>
+    <section id="promotions">
+        <div class="container">
+            <h2>Current Promotions</h2>
+            <p>Details about current promotions</p>
+        </div>
+    </section>
+    <div id="loginPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="closeLogin">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <div id="signupPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="closeSignup">&times;</span>
+            <h2>Sign Up</h2>
+            <form>
+                <label for="newUsername">Username:</label>
+                <input type="text" id="newUsername" name="newUsername">
+                <label for="newPassword">Password:</label>
+                <input type="password" id="newPassword" name="newPassword">
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 FlyCasino. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="scripts.js"></script>
 </body>
 </html>
