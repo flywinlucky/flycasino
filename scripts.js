@@ -22,3 +22,9 @@ window.onclick = function(event) {
         document.getElementById('signupPopup').style.display = 'none';
     }
 };
+
+document.querySelectorAll('.game-card').forEach(card => {
+    card.onclick = function() {
+        window.location.href = 'game.html';
+    };
+});
