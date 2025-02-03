@@ -1,21 +1,21 @@
 :root {
-    --color-sf-background: #1a1a1a;
-    --color-sf-primary: #2b2b2b;
-    --color-sf-tertiary: #4d4d4d;
-    --color-sf-secondary: #3a3a3a;
-    --color-sf-border-control: rgba(119, 130, 155, .28);
-    --color-sf-scrim: rgba(9, 15, 30, .6);
+    --color-background: #0d0d0d;
+    --color-primary: #1c1c1c;
+    --color-secondary: #2a2a2a;
+    --color-tertiary: #3a3a3a;
+    --color-border: rgba(255, 255, 255, 0.1);
     --color-text-primary: #ffffff;
     --color-text-secondary: #b3b3b3;
-    --color-text-link: #0095ff;
-    --color-fn-base: #0095ff;
+    --color-text-link: #00aaff;
+    --color-button: #00aaff;
+    --color-button-hover: #0088cc;
 }
 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--color-sf-background);
+    background-color: var(--color-background);
     color: var(--color-text-primary);
 }
 
@@ -26,7 +26,7 @@ body {
 }
 
 header {
-    background-color: var(--color-sf-primary);
+    background-color: var(--color-primary);
     color: var(--color-text-primary);
     padding: 20px 0;
     text-align: center;
@@ -77,7 +77,7 @@ header nav ul li a {
 }
 
 #hero button {
-    background-color: var(--color-fn-base);
+    background-color: var(--color-button);
     border: none;
     padding: 10px 20px;
     font-size: 1em;
@@ -86,9 +86,13 @@ header nav ul li a {
     color: var(--color-text-primary);
 }
 
+#hero button:hover {
+    background-color: var(--color-button-hover);
+}
+
 #games, #promotions {
     padding: 40px 20px;
-    background-color: var(--color-sf-secondary);
+    background-color: var(--color-secondary);
 }
 
 #games .container, #promotions .container {
@@ -108,7 +112,7 @@ header nav ul li a {
 }
 
 .game-card {
-    background-color: var(--color-sf-tertiary);
+    background-color: var(--color-tertiary);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -134,7 +138,7 @@ header nav ul li a {
 }
 
 footer {
-    background-color: var(--color-sf-primary);
+    background-color: var(--color-primary);
     color: var(--color-text-primary);
     text-align: center;
     padding: 20px 0;
@@ -154,11 +158,15 @@ footer .container {
 .account-actions button {
     margin: 0 10px;
     padding: 10px 20px;
-    background-color: var(--color-fn-base);
+    background-color: var(--color-button);
     border: none;
     cursor: pointer;
     color: var(--color-text-primary);
     border-radius: 5px;
+}
+
+.account-actions button:hover {
+    background-color: var(--color-button-hover);
 }
 
 .account-actions .balance {
@@ -180,10 +188,10 @@ footer .container {
 }
 
 .popup-content {
-    background-color: var(--color-sf-primary);
+    background-color: var(--color-primary);
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid var(--color-sf-border-control);
+    border: 1px solid var(--color-border);
     width: 80%;
     max-width: 400px;
     border-radius: 5px;
@@ -202,6 +210,74 @@ footer .container {
     color: var(--color-text-primary);
     text-decoration: none;
     cursor: pointer;
+}
+
+.top-footer {
+    background-color: var(--color-primary);
+    color: var(--color-text-primary);
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    height: 50px;
+}
+
+.top-footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.top-footer nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin: 0;
+    height: 100%;
+}
+
+.top-footer nav ul li {
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.top-footer nav ul li a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.top-footer .account-actions {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.top-footer .account-actions .balance {
+    margin-right: 10px;
+    color: var(--color-text-primary);
+    font-size: 0.9em;
+}
+
+.top-footer .account-actions button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: var(--color-button);
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    border-radius: 5px;
+    font-size: 0.9em;
+    height: 30px;
+}
+
+.top-footer .account-actions button:hover {
+    background-color: var(--color-button-hover);
 }
 
 /* Responsive Design */
@@ -230,5 +306,18 @@ footer .container {
 
     .popup-content {
         width: 90%;
+    }
+
+    .top-footer .container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .top-footer nav ul {
+        flex-wrap: nowrap;
+    }
+
+    .top-footer .account-actions {
+        flex-wrap: nowrap;
     }
 }
