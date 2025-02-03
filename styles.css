@@ -28,7 +28,7 @@ body {
 header {
     background-color: var(--color-primary);
     color: var(--color-text-primary);
-    padding: 20px 0;
+    padding: 10px 0;
     text-align: center;
 }
 
@@ -145,7 +145,7 @@ footer {
 }
 
 footer .container {
-    max-width: 800px;
+    max-width: 100%;
 }
 
 .account-actions {
@@ -254,6 +254,7 @@ footer .container {
 
 .top-footer .account-actions {
     display: flex;
+    flex-direction: row;
     align-items: center;
     height: 100%;
 }
