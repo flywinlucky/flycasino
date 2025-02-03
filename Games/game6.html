@@ -42,20 +42,6 @@
         .result {
             margin-top: 20px;
         }
-        .live-bets {
-            margin-top: 20px;
-            text-align: left;
-            width: 80%;
-        }
-        .live-bets table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .live-bets th, .live-bets td {
-            border: 1px solid #ffffff;
-            padding: 5px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -67,29 +53,11 @@
             <button onclick="placeStake()">Bet</button>
         </div>
         <div class="result" id="result"></div>
-        <div class="live-bets">
-            <h2>Live Bets</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Bet USD</th>
-                        <th>Multiplier</th>
-                        <th>Win USD</th>
-                    </tr>
-                </thead>
-                <tbody id="liveBetsTable">
-                    <!-- Live bets will be populated here -->
-                </tbody>
-            </table>
-        </div>
     </div>
     <script>
-        let balance = 1000; // Initial balance
         let stake = 0;
         let multiplier = 1.00;
         let gameInterval;
-        const liveBets = [];
 
         function placeStake() {
             stake = parseInt(document.getElementById('stakeAmount').value) || 0;
@@ -100,6 +68,8 @@
             }
 
             balance -= stake;
+            updateBalanceDisplay();
+
             document.getElementById('result').innerHTML = `Game started! Stake: $${stake}. Balance: $${balance.toFixed(2)}`;
 
             multiplier = 1.00;
@@ -113,19 +83,11 @@
                 if (Math.random() < 0.01) { // Random chance to end the game
                     clearInterval(gameInterval);
                     document.getElementById('result').innerHTML = `Rocket flew away at ${multiplier.toFixed(2)}x. You lost $${stake}. Balance: $${balance.toFixed(2)}`;
+                    updateBalanceDisplay();
                 }
             }, 100);
         }
-
-        function updateLiveBetsTable() {
-            const liveBetsTable = document.getElementById('liveBetsTable');
-            liveBetsTable.innerHTML = '';
-            liveBets.forEach(bet => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${bet.name}</td><td>${bet.bet}</td><td>${bet.multiplier}</td><td>${bet.win.toFixed(2)}</td>`;
-                liveBetsTable.appendChild(row);
-            });
-        }
     </script>
+    <script src="../scripts.js"></script>
 </body>
 </html>

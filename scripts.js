@@ -1,3 +1,5 @@
+let balance = 5000; // Initial balance
+
 document.getElementById('loginBtn').onclick = function() {
     document.getElementById('loginPopup').style.display = 'block';
 };
@@ -29,3 +31,11 @@ document.querySelectorAll('.game-card').forEach(card => {
         window.location.href = `game.html?game=${game}`;
     };
 });
+
+function updateBalanceDisplay() {
+    document.querySelectorAll('.balance').forEach(balanceElement => {
+        balanceElement.textContent = `$${balance.toFixed(2)}`;
+    });
+}
+
+updateBalanceDisplay();

@@ -74,12 +74,11 @@
     </div>
     <script>
         let balance = 1000; // Initial balance
-        let stake = 0;
         let mines = [];
         let revealedCells = 0;
 
         function startGame() {
-            stake = parseInt(document.getElementById('stakeAmount').value) || 0;
+            const stake = parseInt(document.getElementById('stakeAmount').value) || 0;
 
             if (stake <= 0 || stake > balance) {
                 alert('Invalid stake amount.');
@@ -104,12 +103,12 @@
             for (let i = 0; i < 25; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
-                cell.onclick = () => revealCell(i);
+                cell.onclick = () => revealCell(i, stake);
                 grid.appendChild(cell);
             }
         }
 
-        function revealCell(index) {
+        function revealCell(index, stake) {
             if (mines[index]) {
                 document.getElementById('result').innerHTML = `You hit a mine! You lost $${stake}. Balance: $${balance.toFixed(2)}`;
                 document.querySelectorAll('.cell')[index].classList.add('mine');

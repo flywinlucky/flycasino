@@ -44,20 +44,6 @@
         .result {
             margin-top: 20px;
         }
-        .live-bets {
-            margin-top: 20px;
-            text-align: left;
-            width: 80%;
-        }
-        .live-bets table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .live-bets th, .live-bets td {
-            border: 1px solid #ffffff;
-            padding: 5px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -72,26 +58,9 @@
             <button onclick="placeStake('over')">Bet Over</button>
         </div>
         <div class="result" id="result"></div>
-        <div class="live-bets">
-            <h2>Live Bets</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Bet USD</th>
-                        <th>Multiplier</th>
-                        <th>Win USD</th>
-                    </tr>
-                </thead>
-                <tbody id="liveBetsTable">
-                    <!-- Live bets will be populated here -->
-                </tbody>
-            </table>
-        </div>
     </div>
     <script>
         let balance = 1000; // Initial balance
-        const liveBets = [];
 
         function placeStake(betType) {
             const stakeAmount = parseInt(document.getElementById('stakeAmount').value) || 0;
@@ -101,35 +70,26 @@
                 return;
             }
 
+            balance -= stakeAmount;
+            updateBalanceDisplay();
+
             const rolledNumber = Math.floor(Math.random() * 36);
             const multiplier = (Math.random() * 2 + 1).toFixed(2); // Random multiplier between 1 and 3
             let winAmount = 0;
 
             if ((betType === 'under' && rolledNumber < 18) || (betType === 'over' && rolledNumber >= 18)) {
                 winAmount = stakeAmount * multiplier;
-                balance += winAmount - stakeAmount;
+                balance += winAmount;
                 document.getElementById('result').innerHTML = `You won! Rolled number: ${rolledNumber}. Multiplier: ${multiplier}. New balance: $${balance.toFixed(2)}`;
             } else {
-                balance -= stakeAmount;
                 document.getElementById('result').innerHTML = `You lost! Rolled number: ${rolledNumber}. New balance: $${balance.toFixed(2)}`;
             }
 
             document.getElementById('rolledNumber').innerHTML = rolledNumber;
             document.getElementById('stakeAmount').value = '';
-
-            liveBets.push({ name: 'Player', bet: stakeAmount, multiplier: multiplier, win: winAmount });
-            updateLiveBetsTable();
-        }
-
-        function updateLiveBetsTable() {
-            const liveBetsTable = document.getElementById('liveBetsTable');
-            liveBetsTable.innerHTML = '';
-            liveBets.forEach(bet => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${bet.name}</td><td>${bet.bet}</td><td>${bet.multiplier}</td><td>${bet.win.toFixed(2)}</td>`;
-                liveBetsTable.appendChild(row);
-            });
+            updateBalanceDisplay();
         }
     </script>
+    <script src="../scripts.js"></script>
 </body>
 </html>

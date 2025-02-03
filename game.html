@@ -41,6 +41,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const game = urlParams.get('game');
         document.getElementById('gameFrame').src = `Games/${game}`;
+        updateBalanceDisplay();
     </script>
     <script src="scripts.js"></script>
 </body>

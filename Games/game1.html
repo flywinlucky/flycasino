@@ -81,21 +81,26 @@
                 return;
             }
 
+            balance -= (redStake + blueStake);
+            updateBalanceDisplay();
+
             const result = document.getElementById('result');
             const randomOutcome = Math.random();
             let multiplier = (Math.random() * 2 + 1).toFixed(2); // Random multiplier between 1 and 3
 
             if (randomOutcome < 0.5) {
-                balance += redStake * multiplier - blueStake;
+                balance += redStake * multiplier;
                 result.innerHTML = `Red wins! Multiplier: ${multiplier}. New balance: $${balance.toFixed(2)}`;
             } else {
-                balance += blueStake * multiplier - redStake;
+                balance += blueStake * multiplier;
                 result.innerHTML = `Blue wins! Multiplier: ${multiplier}. New balance: $${balance.toFixed(2)}`;
             }
 
             document.getElementById('redStake').value = '';
             document.getElementById('blueStake').value = '';
+            updateBalanceDisplay();
         }
     </script>
+    <script src="../scripts.js"></script>
 </body>
 </html>
