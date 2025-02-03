@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plinko Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;    
+            background-color: #0d0d0d;
+            color: #ffffff;
+            flex-direction: column;
+        }
+        .game-container {
+            text-align: center;
+        }
+        .plinko-board {
+            display: grid;
+            grid-template-columns: repeat(9, 30px);
+            grid-gap: 5px;
+            margin: 20px 0;
+        }
+        .plinko-cell {
+            width: 30px;
+            height: 30px;
+            background-color: #2a2a2a;
+            border-radius: 50%;
+        }
+        .stake-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .stake-container input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .stake-container button {
+            padding: 5px 10px;
+            background-color: #00aaff;
+            border: none;
+            cursor: pointer;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .live-bets {
+            margin-top: 20px;
+            text-align: left;
+            width: 80%;
+        }
+        .live-bets table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .live-bets th, .live-bets td {
+            border: 1px solid #ffffff;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Plinko Game</h1>
+        <div class="plinko-board" id="plinkoBoard">
+            <!-- Plinko cells will be generated here -->
+        </div>
+        <div class="stake-container">
+            <input type="number" id="stakeAmount" placeholder="Enter stake amount">
+            <button onclick="placeStake()">Bet</button>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="live-bets">
+            <h2>Live Bets</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Bet USD</th>
+                        <th>Multiplier</th>
+                        <th>Win USD</th>
+                    </tr>
+                </thead>
+                <tbody id="liveBetsTable">
+                    <!-- Live bets will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        let balance = 1000; // Initial balance
+        const liveBets = [];
+
+        function generatePlinkoBoard() {
+            const board = document.getElementById('plinkoBoard');
+            board.innerHTML = '';
+            for (let i = 0; i < 81; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'plinko-cell';
+                board.appendChild(cell);
+            }
+        }
+
+        function placeStake() {
+            const stakeAmount = parseInt(document.getElementById('stakeAmount').value) || 0;
+
+            if (stakeAmount <= 0 || stakeAmount > balance) {
+                alert('Invalid stake amount.');
+                return;
+            }
+
+            balance -= stakeAmount;
+            document.getElementById('result').innerHTML = `Game started! Stake: $${stakeAmount}. Balance: $${balance.toFixed(2)}`;
+
+            const randomOutcome = Math.random();
+            let multiplier = (Math.random() * 2 + 1).toFixed(2); // Random multiplier between 1 and 3
+            let winAmount = stakeAmount * multiplier;
+
+            if (randomOutcome < 0.5) {
+                balance += winAmount;
+                document.getElementById('result').innerHTML = `You won! Multiplier: ${multiplier}. Win amount: $${winAmount.toFixed(2)}. Balance: $${balance.toFixed(2)}`;
+            } else {
+                document.getElementById('result').innerHTML = `You lost! Multiplier: ${multiplier}. Balance: $${balance.toFixed(2)}`;
+            }
+
+            liveBets.push({ name: 'Player', bet: stakeAmount, multiplier: multiplier, win: winAmount });
+            updateLiveBetsTable();
+        }
+
+        function updateLiveBetsTable() {
+            const liveBetsTable = document.getElementById('liveBetsTable');
+            liveBetsTable.innerHTML = '';
+            liveBets.forEach(bet => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${bet.name}</td><td>${bet.bet}</td><td>${bet.multiplier}</td><td>${bet.win.toFixed(2)}</td>`;
+                liveBetsTable.appendChild(row);
+            });
+        }
+
+        generatePlinkoBoard();
+    </script>
+</body>
+</html>

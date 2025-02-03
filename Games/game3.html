@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mines Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;    
+            background-color: #0d0d0d;
+            color: #ffffff;
+            flex-direction: column;
+        }
+        .game-container {
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            grid-gap: 10px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #2a2a2a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cell.revealed {
+            background-color: #00aaff;
+        }
+        .cell.mine {
+            background-color: #ff0000;
+        }
+        .stake-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .stake-container input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .stake-container button {
+            padding: 5px 10px;
+            background-color: #00aaff;
+            border: none;
+            cursor: pointer;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Mines Game</h1>
+        <div class="stake-container">
+            <input type="number" id="stakeAmount" placeholder="Enter stake amount">
+            <button onclick="startGame()">Play</button>
+        </div>
+        <div class="grid" id="grid"></div>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        let balance = 1000; // Initial balance
+        let stake = 0;
+        let mines = [];
+        let revealedCells = 0;
+
+        function startGame() {
+            stake = parseInt(document.getElementById('stakeAmount').value) || 0;
+
+            if (stake <= 0 || stake > balance) {
+                alert('Invalid stake amount.');
+                return;
+            }
+
+            balance -= stake;
+            document.getElementById('result').innerHTML = `Game started! Stake: $${stake}. Balance: $${balance.toFixed(2)}`;
+
+            mines = Array(25).fill(false);
+            for (let i = 0; i < 3; i++) {
+                let mineIndex;
+                do {
+                    mineIndex = Math.floor(Math.random() * 25);
+                } while (mines[mineIndex]);
+                mines[mineIndex] = true;
+            }
+
+            revealedCells = 0;
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 25; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.onclick = () => revealCell(i);
+                grid.appendChild(cell);
+            }
+        }
+
+        function revealCell(index) {
+            if (mines[index]) {
+                document.getElementById('result').innerHTML = `You hit a mine! You lost $${stake}. Balance: $${balance.toFixed(2)}`;
+                document.querySelectorAll('.cell')[index].classList.add('mine');
+                document.querySelectorAll('.cell').forEach(cell => cell.onclick = null);
+            } else {
+                revealedCells++;
+                document.querySelectorAll('.cell')[index].classList.add('revealed');
+                document.querySelectorAll('.cell')[index].onclick = null;
+
+                if (revealedCells === 22) {
+                    const winAmount = stake * 2;
+                    balance += winAmount;
+                    document.getElementById('result').innerHTML = `You won! Win amount: $${winAmount}. Balance: $${balance.toFixed(2)}`;
+                    document.querySelectorAll('.cell').forEach(cell => cell.onclick = null);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
