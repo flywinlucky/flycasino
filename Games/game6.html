@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RocketX Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;    
+            background-color: #0d0d0d;
+            color: #ffffff;
+            flex-direction: column;
+        }
+        .game-container {
+            text-align: center;
+        }
+        .rocket {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .stake-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .stake-container input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .stake-container button {
+            padding: 5px 10px;
+            background-color: #00aaff;
+            border: none;
+            cursor: pointer;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .live-bets {
+            margin-top: 20px;
+            text-align: left;
+            width: 80%;
+        }
+        .live-bets table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .live-bets th, .live-bets td {
+            border: 1px solid #ffffff;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>RocketX Game</h1>
+        <div class="rocket" id="rocket">1.00x</div>
+        <div class="stake-container">
+            <input type="number" id="stakeAmount" placeholder="Enter stake amount">
+            <button onclick="placeStake()">Bet</button>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="live-bets">
+            <h2>Live Bets</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Bet USD</th>
+                        <th>Multiplier</th>
+                        <th>Win USD</th>
+                    </tr>
+                </thead>
+                <tbody id="liveBetsTable">
+                    <!-- Live bets will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        let balance = 1000; // Initial balance
+        let stake = 0;
+        let multiplier = 1.00;
+        let gameInterval;
+        const liveBets = [];
+
+        function placeStake() {
+            stake = parseInt(document.getElementById('stakeAmount').value) || 0;
+
+            if (stake <= 0 || stake > balance) {
+                alert('Invalid stake amount.');
+                return;
+            }
+
+            balance -= stake;
+            document.getElementById('result').innerHTML = `Game started! Stake: $${stake}. Balance: $${balance.toFixed(2)}`;
+
+            multiplier = 1.00;
+            document.getElementById('rocket').innerHTML = `${multiplier.toFixed(2)}x`;
+
+            clearInterval(gameInterval);
+            gameInterval = setInterval(() => {
+                multiplier += 0.01;
+                document.getElementById('rocket').innerHTML = `${multiplier.toFixed(2)}x`;
+
+                if (Math.random() < 0.01) { // Random chance to end the game
+                    clearInterval(gameInterval);
+                    document.getElementById('result').innerHTML = `Rocket flew away at ${multiplier.toFixed(2)}x. You lost $${stake}. Balance: $${balance.toFixed(2)}`;
+                }
+            }, 100);
+        }
+
+        function updateLiveBetsTable() {
+            const liveBetsTable = document.getElementById('liveBetsTable');
+            liveBetsTable.innerHTML = '';
+            liveBets.forEach(bet => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${bet.name}</td><td>${bet.bet}</td><td>${bet.multiplier}</td><td>${bet.win.toFixed(2)}</td>`;
+                liveBetsTable.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
