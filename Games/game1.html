@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky Wheel</title>
+    <title>Casino Crash Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,54 +16,21 @@
             color: #ffffff;
             flex-direction: column;
         }
-        .wheel-container {
+        .game-container {
             text-align: center;
         }
-        .wheel {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            border: 10px solid #ffffff;
-            position: relative;
-            overflow: hidden;
+        .color-box {
+            width: 150px;
+            height: 150px;
+            display: inline-block;
+            margin: 10px;
+            border-radius: 10px;
         }
-        .wheel .segment {
-            width: 50%;
-            height: 50%;
-            background-color: #00aaff;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform-origin: 0% 100%;
-        }
-        .wheel .segment:nth-child(2) {
-            transform: rotate(60deg);
+        .red-box {
             background-color: #ff0000;
         }
-        .wheel .segment:nth-child(3) {
-            transform: rotate(120deg);
-            background-color: #00ff00;
-        }
-        .wheel .segment:nth-child(4) {
-            transform: rotate(180deg);
-            background-color: #ffff00;
-        }
-        .wheel .segment:nth-child(5) {
-            transform: rotate(240deg);
-            background-color: #ff00ff;
-        }
-        .wheel .segment:nth-child(6) {
-            transform: rotate(300deg);
-            background-color: #00ffff;
-        }
-        .spin-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #00aaff;
-            border: none;
-            cursor: pointer;
-            color: #ffffff;
-            border-radius: 5px;
+        .blue-box {
+            background-color: #0000ff;
         }
         .stake-container {
             margin-top: 20px;
@@ -81,62 +48,53 @@
             color: #ffffff;
             border-radius: 5px;
         }
+        .result {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="wheel-container">
-        <div class="wheel">
-            <div class="segment"></div>
-            <div class="segment"></div>
-            <div class="segment"></div>
-            <div class="segment"></div>
-            <div class="segment"></div>
-            <div class="segment"></div>
+    <div class="game-container">
+        <div class="color-box red-box"></div>
+        <div class="color-box blue-box"></div>
+        <div class="stake-container">
+            <input type="number" id="redStake" placeholder="Stake on Red">
+            <input type="number" id="blueStake" placeholder="Stake on Blue">
+            <button onclick="placeStake()">Place Stake</button>
         </div>
-        <button class="spin-button" onclick="spinWheel()">Spin</button>
+        <div class="result" id="result"></div>
     </div>
-    <div class="stake-container">
-        <input type="number" id="stakeAmount" placeholder="Enter stake amount">
-        <button onclick="placeStake()">Place Stake</button>
-    </div>
-    <div id="result"></div>
     <script>
         let balance = 1000; // Initial balance
-        let stake = 0;
-
-        function spinWheel() {
-            if (stake <= 0) {
-                alert('Please place a stake first.');
-                return;
-            }
-
-            const wheel = document.querySelector('.wheel');
-            const randomDegree = Math.floor(Math.random() * 360);
-            wheel.style.transition = 'transform 4s ease-out';
-            wheel.style.transform = `rotate(${randomDegree + 3600}deg)`;
-
-            setTimeout(() => {
-                const result = document.getElementById('result');
-                const winningSegment = Math.floor((randomDegree % 360) / 60);
-                if (winningSegment === 0 || winningSegment === 2 || winningSegment === 4) {
-                    balance += stake;
-                    result.innerHTML = `You won! New balance: $${balance}`;
-                } else {
-                    balance -= stake;
-                    result.innerHTML = `You lost! New balance: $${balance}`;
-                }
-                stake = 0;
-            }, 4000);
-        }
 
         function placeStake() {
-            const stakeAmount = document.getElementById('stakeAmount').value;
-            if (stakeAmount <= 0 || stakeAmount > balance) {
-                alert('Invalid stake amount.');
+            const redStake = parseInt(document.getElementById('redStake').value) || 0;
+            const blueStake = parseInt(document.getElementById('blueStake').value) || 0;
+
+            if (redStake <= 0 && blueStake <= 0) {
+                alert('Please place a stake.');
                 return;
             }
-            stake = parseInt(stakeAmount);
-            document.getElementById('result').innerHTML = `Stake placed: $${stake}`;
+
+            if (redStake > balance || blueStake > balance || (redStake + blueStake) > balance) {
+                alert('Insufficient balance.');
+                return;
+            }
+
+            const result = document.getElementById('result');
+            const randomOutcome = Math.random();
+            let multiplier = (Math.random() * 2 + 1).toFixed(2); // Random multiplier between 1 and 3
+
+            if (randomOutcome < 0.5) {
+                balance += redStake * multiplier - blueStake;
+                result.innerHTML = `Red wins! Multiplier: ${multiplier}. New balance: $${balance.toFixed(2)}`;
+            } else {
+                balance += blueStake * multiplier - redStake;
+                result.innerHTML = `Blue wins! Multiplier: ${multiplier}. New balance: $${balance.toFixed(2)}`;
+            }
+
+            document.getElementById('redStake').value = '';
+            document.getElementById('blueStake').value = '';
         }
     </script>
 </body>
