@@ -2,11 +2,6 @@ let balance = 5000; // Initial balance
 
 document.getElementById('loginBtn').onclick = function() {
     document.getElementById('loginPopup').style.display = 'block';
-    TelegramLoginWidget.init({
-        bot_id: '7566897555:AAG-7T_y31rmY5Adtwz3d8oxdTo2uNXuj-U',
-        request_access: true,
-        onAuthCallback: onTelegramAuth
-    });
 };
 
 document.getElementById('signupBtn').onclick = function() {
@@ -44,11 +39,3 @@ function updateBalanceDisplay() {
 }
 
 updateBalanceDisplay();
-
-function onTelegramAuth(user) {
-    // Handle successful authentication here
-    console.log(user);
-    document.getElementById('loginPopup').style.display = 'none';
-    balance = 10000; // Example: set balance after login
-    updateBalanceDisplay();
-}
